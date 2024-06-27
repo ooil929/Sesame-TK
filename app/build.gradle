@@ -1,24 +1,20 @@
 apply plugin: 'com.android.application'
 
 android {
-    def version = project.getProperties().get("version")
-    if (version == null || "unspecified".equalsIgnoreCase(version)) {
-        version = "TEST"
-    }
-
     compileSdk 34
+    buildToolsVersion '30.0.2'
+
     defaultConfig {
         applicationId "tkaxv7s.xposed.sesame"
         minSdk 21
-        //noinspection ExpiredTargetSdkVersion
         targetSdk 31
+
+        // 版本号和版本名的处理
+        def version = project.hasProperty("version") ? project.version : "TEST"
         versionCode 80
         versionName version
     }
-    ext {
-        applicationName = "Sesame"
-        applicationType = "Normal"
-    }
+
     flavorDimensions.add("default")
     productFlavors {
         normal {
@@ -30,10 +26,13 @@ android {
             ext.applicationType = "Compatible"
         }
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            // 自定义输出文件名
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
@@ -44,24 +43,17 @@ android {
             }
         }
     }
-    buildToolsVersion '30.0.2'
-    applicationVariants.configureEach { variant ->
-        variant.outputs.configureEach { output ->
-            def outputFile = output.outputFile
-            if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                    output.outputFileName = "${applicationName}-${variant.productFlavors[0].ext.applicationType}-${defaultConfig.versionName}.apk"
-            }
-        }
-    }
 }
 
 dependencies {
+    // 依赖配置
     compileOnly 'de.robv.android.xposed:api:82'
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.32'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.32'
     implementation 'com.elvishew:xlog:1.11.0'
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 
+    // 根据 productFlavors 配置不同的 Jackson 版本
     normalImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.17.1'
     normalImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.17.1'
     normalImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.17.1'
@@ -69,5 +61,4 @@ dependencies {
     compatibleImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.5'
     compatibleImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.5'
     compatibleImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.5'
-
 }
