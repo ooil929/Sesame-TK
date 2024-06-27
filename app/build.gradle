@@ -25,10 +25,6 @@ android {
             dimension "default"
             ext.applicationType = "Normal"
         }
-        compatible {
-            dimension "default"
-            ext.applicationType = "Compatible"
-        }
     }
     buildTypes {
         release {
@@ -65,9 +61,5 @@ dependencies {
     normalImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.17.1'
     normalImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.17.1'
     normalImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.17.1'
-
-    compatibleImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.5'
-    compatibleImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.5'
-    compatibleImplementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.5'
 
 }
